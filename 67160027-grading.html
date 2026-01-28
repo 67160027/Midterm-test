@@ -252,20 +252,16 @@ function LoadFromStorage() {
     // 8. Save to localStorage
     saveToStorage(data);
   }
-    // Example usage: 
- saveToLocalStorage({
-    name: "",
-    subject: "Frontend",
-    midterm: 111,
-    final: 90,
-    assignment: 70,
-    score: 82,
-    grade: "A",
-    status: "PASS"
-  });
+   function handleClear() {
+    document.getElementById("student-name").value = "";
+    document.getElementById("subject-name").value = "";
+    document.getElementById("midterm-score").value = "";
+    document.getElementById("final-score").value = "";
+    document.getElementById("assignment-score").value = "";
 
-  console.log(JSON.parse(localStorage.getItem("studentData")));
-  console.log(LoadFromStorage());
+    document.getElementById("result-container").style.display = "none";
+  }
+    // Example usage: 
 </script>
 
 </body>
