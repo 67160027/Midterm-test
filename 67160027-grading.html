@@ -148,10 +148,26 @@
   function calculateScore(midterm, final, assignment) {
     return (midterm * 0.2) + (final * 0.5) + (assignment * 0.3);
   }
+
+  function getGrade(score) {
+    if (score >= 80) {
+      return "A";
+    } else if (score >= 70) {
+      return "B";
+    } else if (score >= 60) {
+      return "C";
+    } else if (score >= 50) {
+      return "D";
+    } else {
+      return "F";
+    }
+}
     // Example usage:
-  console.log(calculateScore(80, 90, 70)); // 82
-  console.log(calculateScore(100, 100, 100)); // 100
-  console.log(calculateScore(50, 50, 50)); // 50
+  console.log(getGrade(85)); // A
+  console.log(getGrade(75)); // B
+  console.log(getGrade(65)); // C
+  console.log(getGrade(55)); // D
+  console.log(getGrade(40)); // F
 </script>
 
 </body>
