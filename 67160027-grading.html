@@ -193,7 +193,78 @@ function LoadFromStorage() {
       return null;
     }
 }
+
+  function handleCalculate() {
+    // 1. Get values
+    const name = document.getElementById("student-name").value.trim();
+    const subject = document.getElementById("subject-name").value.trim();
+    const midterm = document.getElementById("midterm-score").value;
+    const final = document.getElementById("final-score").value;
+    const assignment = document.getElementById("assignment-score").value;
+
+    // 2. Validate name & subject
+    if (name === "" || subject === "") {
+      alert("Please enter student name and subject");
+      return;
+    }
+
+    // 2. Validate scores
+    if (
+      !validateScore(midterm) ||
+      !validateScore(final) ||
+      !validateScore(assignment)
+    ) {
+      alert("All scores must be between 0-100");
+      return;
+    }
+
+    // 3. Calculate total score
+    const totalScore = calculateScore(
+      Number(midterm),
+      Number(final),
+      Number(assignment)
+    );
+
+    // 4. Convert to grade
+    const grade = getGrade(totalScore);
+
+    // 5. Get PASS / FAIL
+    const status = getStatus(grade);
+
+    // 6. Display result
+    document.getElementById("result-container").style.display = "block";
+    document.getElementById("total-score").textContent = totalScore;
+    document.getElementById("final-grade").textContent = grade;
+    document.getElementById("pass-status").textContent = status;
+
+    // 7. Prepare data object
+    const data = {
+      name: name,
+      subject: subject,
+      midterm: Number(midterm),
+      final: Number(final),
+      assignment: Number(assignment),
+      score: totalScore,
+      grade: grade,
+      status: status
+    };
+
+    // 8. Save to localStorage
+    saveToStorage(data);
+  }
     // Example usage: 
+ saveToLocalStorage({
+    name: "",
+    subject: "Frontend",
+    midterm: 111,
+    final: 90,
+    assignment: 70,
+    score: 82,
+    grade: "A",
+    status: "PASS"
+  });
+
+  console.log(JSON.parse(localStorage.getItem("studentData")));
   console.log(LoadFromStorage());
 </script>
 
