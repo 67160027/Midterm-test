@@ -125,6 +125,7 @@
       <p>Status: <span id="pass-status">-</span></p>
     </div>
   </div>
+
   <script>
   function validateScore(score) {
     if (score === "") {
@@ -143,16 +144,14 @@
 
     return true;
   }
-
   
-</script>
-<script>
-  console.log(validateScore(85));      // true
-  console.log(validateScore("85"));    // true
-  console.log(validateScore("abc"));   // false
-  console.log(validateScore(-5));      // false
-  console.log(validateScore(105));     // false
-  console.log(validateScore(""));      // false
+  function calculateScore(midterm, final, assignment) {
+    return (midterm * 0.2) + (final * 0.5) + (assignment * 0.3);
+  }
+    // Example usage:
+  console.log(calculateScore(80, 90, 70)); // 82
+  console.log(calculateScore(100, 100, 100)); // 100
+  console.log(calculateScore(50, 50, 50)); // 50
 </script>
 
 </body>
