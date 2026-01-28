@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Student Grade System</title>
 
   <style>
-    /* ===== Main Layout ===== */
+    /* ===== Layout ===== */
     body {
       font-family: Arial, sans-serif;
     }
@@ -14,23 +14,18 @@
       display: flex;
       flex-direction: column;
       max-width: 600px;
-      margin: 30px auto;
-      gap: 12px;
-    }
-
-    h2 {
-      text-align: center;
-    }
-
-    /* ===== Input Rows ===== */
-    .row {
-      display: flex;
-      align-items: center;
+      margin: 20px auto;
       gap: 10px;
     }
 
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     label {
-      width: 140px;
+      width: 150px;
     }
 
     input {
@@ -46,7 +41,6 @@
       outline: none;
     }
 
-    /* ===== Buttons ===== */
     .btn-group {
       display: flex;
       justify-content: space-between;
@@ -70,7 +64,7 @@
       color: white;
     }
 
-    /* ===== Result Box ===== */
+    /* ===== Result ===== */
     #result-container {
       display: none;
       background-color: #e6ffe6;
@@ -78,6 +72,18 @@
       padding: 15px;
       border-radius: 8px;
       margin-top: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
     }
   </style>
 </head>
@@ -124,145 +130,146 @@
       <p>Final Grade: <span id="final-grade">-</span></p>
       <p>Status: <span id="pass-status">-</span></p>
     </div>
+
+    <!-- Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Subject</th>
+          <th>Total Score</th>
+          <th>Grade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
   </div>
 
   <script>
-  function validateScore(score) {
-    if (score === "") {
-      return false;
+    /* ===== 2.1 Validate Score ===== */
+    function validateScore(score) {
+      if (score === "") return false;
+      const num = Number(score);
+      return !isNaN(num) && num >= 0 && num <= 100;
     }
 
-    const num = Number(score);
-
-    if (isNaN(num)) {
-      return false;
+    /* ===== 2.2 Calculate Score ===== */
+    function calculateScore(midterm, final, assignment) {
+      return (midterm * 0.2) + (final * 0.5) + (assignment * 0.3);
     }
 
-    if (num < 0 || num > 100) {
-      return false;
-    }
-
-    return true;
-  }
-  
-  function calculateScore(midterm, final, assignment) {
-    return (midterm * 0.2) + (final * 0.5) + (assignment * 0.3);
-  }
-
-  function getGrade(score) {
-    if (score >= 80) {
-      return "A";
-    } else if (score >= 70) {
-      return "B";
-    } else if (score >= 60) {
-      return "C";
-    } else if (score >= 50) {
-      return "D";
-    } else {
+    /* ===== 2.3 Get Grade ===== */
+    function getGrade(score) {
+      if (score >= 80) return "A";
+      if (score >= 70) return "B";
+      if (score >= 60) return "C";
+      if (score >= 50) return "D";
       return "F";
     }
-}
 
-function getStatus(grade) {
-      if (grade === "F") {
-        return "Fail";
-      } else {
-        return "Pass";
+    /* ===== 2.4 Get Status ===== */
+    function getStatus(grade) {
+      return grade === "F" ? "FAIL" : "PASS";
+    }
+
+    /* ===== 2.5 Save to Storage ===== */
+    function saveToStorage(data) {
+      const oldData = loadFromStorage() || [];
+      oldData.push(data);
+      localStorage.setItem("studentData", JSON.stringify(oldData));
+    }
+
+    /* ===== 2.6 Load from Storage ===== */
+    function loadFromStorage() {
+      const data = localStorage.getItem("studentData");
+      return data ? JSON.parse(data) : null;
+    }
+
+    /* ===== Helper: Render Table ===== */
+    function renderTable(dataArray) {
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = "";
+
+      dataArray.map(item => {
+        const row = `
+          <tr>
+            <td>${item.name}</td>
+            <td>${item.subject}</td>
+            <td>${item.score}</td>
+            <td>${item.grade}</td>
+            <td>${item.status}</td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    }
+
+    /* ===== 2.7 Handle Calculate ===== */
+    function handleCalculate() {
+      const name = document.getElementById("student-name").value.trim();
+      const subject = document.getElementById("subject-name").value.trim();
+      const midterm = document.getElementById("midterm-score").value;
+      const final = document.getElementById("final-score").value;
+      const assignment = document.getElementById("assignment-score").value;
+
+      if (!name || !subject) {
+        alert("Please enter student name and subject");
+        return;
       }
-    }
 
-function saveToLocalStorage(data) {
-      let studentData = localStorage.getItem("studentData");
-      if (studentData) {
-        studentData = JSON.parse(studentData);
-      } else {
-        studentData = [];
+      if (
+        !validateScore(midterm) ||
+        !validateScore(final) ||
+        !validateScore(assignment)
+      ) {
+        alert("All scores must be between 0-100");
+        return;
       }
 
-        studentData.push(data);
+      const total = calculateScore(
+        Number(midterm),
+        Number(final),
+        Number(assignment)
+      );
 
-        localStorage.setItem("studentData", JSON.stringify(studentData));
+      const grade = getGrade(total);
+      const status = getStatus(grade);
+
+      document.getElementById("result-container").style.display = "block";
+      document.getElementById("total-score").textContent = total;
+      document.getElementById("final-grade").textContent = grade;
+      document.getElementById("pass-status").textContent = status;
+
+      const data = { name, subject, midterm, final, assignment, score: total, grade, status };
+      saveToStorage(data);
+      renderTable(loadFromStorage());
     }
 
-function LoadFromStorage() {
-    const data = localStorage.getItem("studentData");
-
-    if (data) {
-      return JSON.parse(data);
-    } else {
-      return null;
-    }
-}
-
-  function handleCalculate() {
-    // 1. Get values
-    const name = document.getElementById("student-name").value.trim();
-    const subject = document.getElementById("subject-name").value.trim();
-    const midterm = document.getElementById("midterm-score").value;
-    const final = document.getElementById("final-score").value;
-    const assignment = document.getElementById("assignment-score").value;
-
-    // 2. Validate name & subject
-    if (name === "" || subject === "") {
-      alert("Please enter student name and subject");
-      return;
+    /* ===== 2.8 Handle Clear ===== */
+    function handleClear() {
+      document.getElementById("student-name").value = "";
+      document.getElementById("subject-name").value = "";
+      document.getElementById("midterm-score").value = "";
+      document.getElementById("final-score").value = "";
+      document.getElementById("assignment-score").value = "";
+      document.getElementById("result-container").style.display = "none";
     }
 
-    // 2. Validate scores
-    if (
-      !validateScore(midterm) ||
-      !validateScore(final) ||
-      !validateScore(assignment)
-    ) {
-      alert("All scores must be between 0-100");
-      return;
-    }
+    /* ===== 2.9 Page Load ===== */
+    window.addEventListener("DOMContentLoaded", () => {
+      const data = loadFromStorage();
+      if (data) {
+        renderTable(data);
+      }
+    });
 
-    // 3. Calculate total score
-    const totalScore = calculateScore(
-      Number(midterm),
-      Number(final),
-      Number(assignment)
-    );
+    /* ===== 2.10 Event Listener ===== */
+    document.getElementById("btn-calculate")
+      .addEventListener("click", handleCalculate);
 
-    // 4. Convert to grade
-    const grade = getGrade(totalScore);
-
-    // 5. Get PASS / FAIL
-    const status = getStatus(grade);
-
-    // 6. Display result
-    document.getElementById("result-container").style.display = "block";
-    document.getElementById("total-score").textContent = totalScore;
-    document.getElementById("final-grade").textContent = grade;
-    document.getElementById("pass-status").textContent = status;
-
-    // 7. Prepare data object
-    const data = {
-      name: name,
-      subject: subject,
-      midterm: Number(midterm),
-      final: Number(final),
-      assignment: Number(assignment),
-      score: totalScore,
-      grade: grade,
-      status: status
-    };
-
-    // 8. Save to localStorage
-    saveToStorage(data);
-  }
-   function handleClear() {
-    document.getElementById("student-name").value = "";
-    document.getElementById("subject-name").value = "";
-    document.getElementById("midterm-score").value = "";
-    document.getElementById("final-score").value = "";
-    document.getElementById("assignment-score").value = "";
-
-    document.getElementById("result-container").style.display = "none";
-  }
-    // Example usage: 
-</script>
-
+    document.getElementById("btn-clear")
+      .addEventListener("click", handleClear);
+  </script>
 </body>
 </html>
