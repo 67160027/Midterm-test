@@ -183,19 +183,18 @@ function saveToLocalStorage(data) {
 
         localStorage.setItem("studentData", JSON.stringify(studentData));
     }
-    // Example usage:
-   saveToLocalStorage({
-    name: "John",
-    subject: "JavaScript",
-    midterm: 80,
-    final: 90,
-    assignment: 70,
-    score: 82,
-    grade: "B",
-    status: "PASS"
-  });
 
-  console.log(JSON.parse(localStorage.getItem("studentData")));
+function LoadFromStorage() {
+    const data = localStorage.getItem("studentData");
+
+    if (data) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+}
+    // Example usage: 
+  console.log(LoadFromStorage());
 </script>
 
 </body>
