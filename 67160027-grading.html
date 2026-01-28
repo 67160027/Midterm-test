@@ -170,12 +170,32 @@ function getStatus(grade) {
         return "Pass";
       }
     }
+
+function saveToLocalStorage(data) {
+      let studentData = localStorage.getItem("studentData");
+      if (studentData) {
+        studentData = JSON.parse(studentData);
+      } else {
+        studentData = [];
+      }
+
+        studentData.push(data);
+
+        localStorage.setItem("studentData", JSON.stringify(studentData));
+    }
     // Example usage:
-  console.log(getStatus("A")); // PASS
-  console.log(getStatus("B")); // PASS
-  console.log(getStatus("C")); // PASS
-  console.log(getStatus("D")); // PASS
-  console.log(getStatus("F")); // FAIL
+   saveToLocalStorage({
+    name: "John",
+    subject: "JavaScript",
+    midterm: 80,
+    final: 90,
+    assignment: 70,
+    score: 82,
+    grade: "B",
+    status: "PASS"
+  });
+
+  console.log(JSON.parse(localStorage.getItem("studentData")));
 </script>
 
 </body>
