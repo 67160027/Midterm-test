@@ -162,12 +162,20 @@
       return "F";
     }
 }
+
+function getStatus(grade) {
+      if (grade === "F") {
+        return "Fail";
+      } else {
+        return "Pass";
+      }
+    }
     // Example usage:
-  console.log(getGrade(85)); // A
-  console.log(getGrade(75)); // B
-  console.log(getGrade(65)); // C
-  console.log(getGrade(55)); // D
-  console.log(getGrade(40)); // F
+  console.log(getStatus("A")); // PASS
+  console.log(getStatus("B")); // PASS
+  console.log(getStatus("C")); // PASS
+  console.log(getStatus("D")); // PASS
+  console.log(getStatus("F")); // FAIL
 </script>
 
 </body>
