@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Grade System</title>
+
+  <style>
+    /* ===== Main Layout ===== */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 30px auto;
+      gap: 12px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    /* ===== Input Rows ===== */
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      width: 140px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input:focus {
+      background-color: #f0f8ff;
+      border-color: #007bff;
+      outline: none;
+    }
+
+    /* ===== Buttons ===== */
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #btn-calculate {
+      background-color: #007bff;
+      color: white;
+    }
+
+    #btn-clear {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    /* ===== Result Box ===== */
+    #result-container {
+      display: none;
+      background-color: #e6ffe6;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Student Grade System</h2>
+
+    <!-- Input Fields -->
+    <div class="row">
+      <label>Student Name</label>
+      <input id="student-name" />
+    </div>
+
+    <div class="row">
+      <label>Subject</label>
+      <input id="subject-name" />
+    </div>
+
+    <div class="row">
+      <label>Midterm</label>
+      <input id="midterm-score" type="text" />
+    </div>
+
+    <div class="row">
+      <label>Final</label>
+      <input id="final-score" type="text" />
+    </div>
+
+    <div class="row">
+      <label>Assignment</label>
+      <input id="assignment-score" type="text" />
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-group">
+      <button id="btn-calculate">Calculate Grade</button>
+      <button id="btn-clear">Clear</button>
+    </div>
+
+    <!-- Result Section -->
+    <div id="result-container">
+      <p>Total Score: <span id="total-score">0</span></p>
+      <p>Final Grade: <span id="final-grade">-</span></p>
+      <p>Status: <span id="pass-status">-</span></p>
+    </div>
+  </div>
+</body>
+</html>
